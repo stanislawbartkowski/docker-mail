@@ -33,3 +33,9 @@ Ports: for non-root container map ports to values greater than 1000
 
 > podman run --name mail -d -p 1025:25  -p 1993:993 mail<br>
 
+Open port if necessary
+
+> firewall-cmd --permanent --add-port=1025/tcp<br>
+> firewall-cmd --permanent --add-port=1993/tcp<br>
+> firewall-cmd --reload<br>
+
