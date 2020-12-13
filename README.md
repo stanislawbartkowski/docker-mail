@@ -57,6 +57,18 @@ Configuration is very basic and only minimal changes are applied to make them wo
 
 https://github.com/stanislawbartkowski/docker-mail/blob/main/config.sh
 
+## User
+
+Two default users are created: test/secret and sb/secret. To add new users, logon to the running container and add them manually.
+
+> podman exec -it mail bash
+```
+[root@407bd6d0898c /]# adduser dzeus
+[root@407bd6d0898c /]# echo "dzeus:secret" | chpasswd
+```
+
+# Test your mail server
+
 ## Test SMTP
 
 Example session using telnet
