@@ -57,5 +57,32 @@ Configuration is very basic and only minimal changes are applied to make them wo
 
 https://github.com/stanislawbartkowski/docker-mail/blob/main/config.sh
 
+## Test SMTP
 
+Example session using telnet
 
+> telnet thinkde 1025<br>
+
+```
+sbartkowski:docker-mail$ telnet thinkde 1025
+Trying 192.168.0.206...
+Connected to thinkde.
+Escape character is '^]'.
+220 test.mail.com ESMTP Postfix
+HELO my.server
+250 test.mail.com
+MAIL FROM:sb@gmail.com
+250 2.1.0 Ok
+RCPT TO: test@test.mail.com
+250 2.1.5 Ok
+DATA
+354 End data with <CR><LF>.<CR><LF>
+SUBJECT: First message
+Hello mail server, nice to meet you!
+.
+250 2.0.0 Ok: queued as 9F1CD1831F434
+^]
+telnet> quit
+Connection closed.
+
+```
