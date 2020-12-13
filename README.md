@@ -98,3 +98,14 @@ telnet> quit
 Connection closed.
 
 ```
+## mutt
+
+> vi .muttrc<br>
+```
+set smtp_url = "smtp://thinkde:1025"
+```
+> mutt -f imaps://thinkde:1993<br>
+
+User and password: test/secret. Provide user without domain name.<br>
+
+![](https://github.com/stanislawbartkowski/docker-mail/blob/main/images/Zrzut%20ekranu%20z%202020-12-13%2021-38-10.png)
