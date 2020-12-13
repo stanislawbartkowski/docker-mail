@@ -141,6 +141,31 @@ Sending Email
 
 Unfortunately, I was unable to convince Thunderbird to cooperate with dovecot.
 
+## Command line
+
+Send mail<br>
+>  echo "Welcome" | mailx -v  -S smtp=thinkde:1025 -s "I'm your sendmail"  -r "sb"  test@test.mail.com 
+```
+Resolving host thinkde . . . done.
+Connecting to 192.168.0.206:1025 . . . connected.
+220 test.mail.com ESMTP Postfix
+>>> HELO li-5483f1cc-30f8-11b2-a85c-ead196af19ff
+250 test.mail.com
+>>> MAIL FROM:<sb>
+250 2.1.0 Ok
+>>> RCPT TO:<test@test.mail.com>
+250 2.1.5 Ok
+>>> DATA
+354 End data with <CR><LF>.<CR><LF>
+>>> .
+250 2.0.0 Ok: queued as C3C4D1831F293
+>>> QUIT
+221 2.0.0 Bye
+```
+
+Receving mails<br>
+
+
 # Troubleshooting
 
 Dovecot and Postifx are sending all messages to syslog which is not active. In order to intercept messages, *journal* should be launched manually.
