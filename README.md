@@ -10,9 +10,9 @@ Containerized mail server. Simple and basic mail server using Postfix and Doveco
 
 Two mail recipients for testing are created: (U/P) test/secret and sb/secret
 
-## Create container
+# Create container
 
-# Customization 
+## Customization 
 
 Ports exposed
 
@@ -27,13 +27,13 @@ Domain name
 | ---- | --- | --- |
 | DOMAIN | The domain name of SMPT and IMAP | test.sb.com
 
-# Container
+## Container
 
-Ports: for non-root container map ports to values greater than 1000
+Ports: for non-root container map ports to values greater than 1000.
 
 > podman run --name mail -d -p 1025:25  -p 1993:993 mail<br>
 
-Open port if necessary
+Open port if behind firewall.
 
 > firewall-cmd --permanent --add-port=1025/tcp<br>
 > firewall-cmd --permanent --add-port=1993/tcp<br>
