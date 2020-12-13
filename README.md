@@ -33,9 +33,27 @@ Ports: for non-root container map ports to values greater than 1000.
 
 > podman run --name mail -d -p 1025:25  -p 1993:993 mail<br>
 
-Open port if behind firewall.
+Open port if behind a firewall.
 
 > firewall-cmd --permanent --add-port=1025/tcp<br>
 > firewall-cmd --permanent --add-port=1993/tcp<br>
 > firewall-cmd --reload<br>
+
+## Test ports and SSL
+
+Assume hostname *thinkde*
+
+> nc -zv thinkde 1025<br>
+> nc -zv thinkde 1993<br>
+> openssl s_client -connect thinkde:1993<br>
+
+## Services configuration
+
+Configuration of the services including the domain name (DOMAIN) is performed when the container is created. So using the same image, several containers serving different domains can be created.
+
+Configuration is very basic and only minimal changes are applied to make them working.
+
+https://github.com/stanislawbartkowski/docker-mail/blob/main/config.sh
+
+
 
