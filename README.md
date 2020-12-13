@@ -4,7 +4,7 @@ Containerized mail server. Simple and basic mail server using Postfix and Doveco
 
 # Create image
 
-> https://github.com/stanislawbartkowski/docker-mail.git<br>
+> git clone https://github.com/stanislawbartkowski/docker-mail.git<br>
 > cd docker-mail<br>
 > podman build -t mail .<br>
 
