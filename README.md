@@ -33,6 +33,8 @@ Ports: for non-root container map ports to values greater than 1000.
 
 > podman run --name mail -d -p 1025:25  -p 1993:993 mail<br>
 
+> podman run --name mailsb -d -p 1025:25 -p 1993:993 --env DOMAIN=sb.com.mail mail<br>
+
 Open port if behind a firewall.
 
 > firewall-cmd --permanent --add-port=1025/tcp<br>
