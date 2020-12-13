@@ -145,11 +145,11 @@ Unfortunately, I was unable to convince Thunderbird to cooperate with dovecot.
 
 Dovecot and Postifx are sending all messages to syslog which is not active. In order to intercept messages, *journal* should be launched manually.
 
-On the first console:
+First console:<br>
 > podman exec -it mail bash<br>
 > root@407bd6d0898c /]# /usr/lib/systemd/systemd-journald<br>
 
-On the next console:
+Another console:<br>
 > podman exec mail journalctl -f
 ```
 -- Logs begin at Sun 2020-12-13 20:25:13 UTC. --
