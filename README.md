@@ -109,3 +109,30 @@ set smtp_url = "smtp://thinkde:1025"
 User and password: test/secret. Provide user without domain name.<br>
 
 ![](https://github.com/stanislawbartkowski/docker-mail/blob/main/images/Zrzut%20ekranu%20z%202020-12-13%2021-38-10.png)
+
+## evolution
+
+Identity<br>
+
+* Account name, any name: sb@test.mail.com
+* Full Name, any name 
+* Email Address, account name including domainname : sb@test.mail.com
+
+![](https://github.com/stanislawbartkowski/docker-mail/blob/main/images/Zrzut%20ekranu%20z%202020-12-13%2022-12-21.png)
+
+Receiving Email<br>
+
+* Server: thinkde
+* Port: 1993
+* Username, without domain name: sb
+
+![](https://github.com/stanislawbartkowski/docker-mail/blob/main/images/Zrzut%20ekranu%20z%202020-12-13%2021-59-15.png)
+
+Sending Email
+
+* Server : thinkde
+* Port: 1025
+* No encryption and no authentication
+
+
+
