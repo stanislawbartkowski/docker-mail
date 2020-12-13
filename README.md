@@ -137,3 +137,30 @@ Sending Email
 
 ![](https://github.com/stanislawbartkowski/docker-mail/blob/main/images/Zrzut%20ekranu%20z%202020-12-13%2022-16-41.png)
 
+## Mozilla Thunderbird
+
+Unfortunately, I was unable to convince Thunderbird to cooperate with dovecot.
+
+# Troubleshooting
+
+Dovecot and Postifx are sending all messages to syslog which is not active. In order to intercept messages, *journal* should be launched manually.
+
+On the first console:
+> podman exec -it mail bash<br>
+> root@407bd6d0898c /]# /usr/lib/systemd/systemd-journald<br>
+
+On the next console:
+> podman exec mail journalctl -f
+```
+-- Logs begin at Sun 2020-12-13 20:25:13 UTC. --
+Dec 13 20:25:13 407bd6d0898c systemd-journal[318]: Runtime journal is using 8.0M (max allowed 4.0G, trying to leave 4.0G free of 79.3G available → current limit 4.0G).
+Dec 13 20:25:13 407bd6d0898c systemd-journal[318]: Journal started
+
+Dec 13 20:26:39 407bd6d0898c dovecot[196]: imap-login: Login: user=<test>, method=PLAIN, rip=127.0.0.1, lip=127.0.0.1, mpid=331, TLS, session=<d7LGV162Jqd/AAAB>
+Dec 13 20:26:39 407bd6d0898c dovecot[196]: imap-login: Login: user=<sb>, method=PLAIN, rip=127.0.0.1, lip=127.0.0.1, mpid=332, TLS, session=<ZsbGV162KKd/AAAB>
+Dec 13 20:26:45 407bd6d0898c dovecot[196]: imap(sb): Connection closed (NOOP finished 5.598 secs ago) in=388 out=1516
+Dec 13 20:26:45 407bd6d0898c dovecot[196]: imap(test): Connection closed (UID FETCH finished 5.596 secs ago) in=375 out=1514
+
+```
+
+
