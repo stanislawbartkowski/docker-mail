@@ -29,7 +29,7 @@ Domain name
 
 ## Container
 
-Ports: for non-root container map ports to values greater than 1000.
+Ports: for non-root container map ports to values greater than 1024.
 
 > podman run --name mail -d -p 1025:25  -p 1993:993 mail<br>
 
