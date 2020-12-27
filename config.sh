@@ -1,8 +1,15 @@
+POSTFIXPORT=${ENVSMTPPORT:-1025}
+IMAPSPORT=${ENVIMAPSPORT:-1993}
+# temp file reused across
+TMP=`mktemp`
+
 setprod() {
   POSTFIXMAIN=/etc/postfix/main.cf
+  POSTFIXMASTER=/etc/postfix/master.cf 
   DOVECONF=/etc/dovecot/dovecot.conf
   DOVEAUTH=/etc/dovecot/conf.d/10-auth.conf
   DOVEMAIL=/etc/dovecot/conf.d/10-mail.conf
+  DOVEMASTER=/etc/dovecot/conf.d/10-master.conf
 }
 
 settest() {
@@ -32,7 +39,6 @@ test_par() {
 
 enable_par() {
   local -r INPUT=$1
-  local -r TMP=`mktemp`     
   local -r para=$2
   local -r val="$3"
   local vals="$4"
@@ -43,8 +49,11 @@ enable_par() {
   echo "" >>$TMP
   echo "$para = $vals" >>$TMP
   cp $TMP $INPUT
-  rm $TMP
 }
+
+# ------------------------
+# fixing postfix
+# ------------------------
 
 enable_main() {
   local -r INPUT=$1
@@ -57,8 +66,24 @@ enable_main() {
   enable_par $INPUT relay_domains ""
 }
 
+changeportpostfix() {
+  # mind space after smtp in replace part of sed command
+  sed "/smtp\ *inet/s/smtp /${POSTFIXPORT} /g" $POSTFIXMASTER >$TMP
+  cp $TMP $POSTFIXMASTER
+}
+
 postfixconf() {
    enable_main $POSTFIXMAIN
+   changeportpostfix
+}
+
+# -----------------------------
+# fixing dovecot
+# -----------------------------
+
+changeimapsport() {
+  sed "s/#*port *= *993/port=${IMAPSPORT}/g" $DOVEMASTER >$TMP
+  cp $TMP $DOVEMASTER
 }
 
 dovecotconf() {  
@@ -69,7 +94,10 @@ dovecotconf() {
   enable_par $DOVEAUTH auth_mechanisms "plain login"
 
   enable_par $DOVEMAIL mail_location "maildir:~\/Maildir" "maildir:~/Maildir"
+  changeimapsport
 }
+
+# --------------------------------
 
 #settest
 setprod
@@ -78,4 +106,4 @@ postfixconf
 
 dovecotconf
 
-
+rm $TMP

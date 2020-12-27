@@ -1,9 +1,14 @@
 FROM centos:7 
 # FROM centos/systemd
 
+ARG SMTPPORT=1025
+ARG IMAPSPORT=1993
+
 LABEL maintainer=<stanislawbartkowski@gmail.com>
 
 ENV DOMAIN="test.mail.com"
+ENV ENVSMTPPORT=${SMTPPORT}
+ENV ENVIMAPSPORT=${IMAPSPORT}
 
 RUN yum install dovecot postfix -y
 
@@ -15,7 +20,8 @@ RUN useradd test && \
   useradd sb && \
   echo "sb:secret" | chpasswd
 
-EXPOSE 25
+EXPOSE ${SMTPPORT}
 EXPOSE 993
+USER root
 
 CMD ["sh","./start.sh"]
