@@ -16,6 +16,9 @@ Build variables
 
 Two mail recipients for testing are created: (U/P) test/secret and sb/secret
 
+> Change exposed port
+podman build –build-arg=SMTPPORT=2025 -t mail .
+
 # Create container
 
 ## Customization 
@@ -37,9 +40,9 @@ Domain name
 
 Ports: for non-root container map ports to values greater than 1024.
 
-> podman run --name mail -d -p 1025:25  -p 1993:993 mail<br>
+> podman run --name mail -d -p 1025:1025  -p 1993:993 mail<br>
 
-> podman run --name mailsb -d -p 1025:25 -p 1993:993 --env DOMAIN=sb.com.mail mail<br>
+> podman run --name mailsb -d -p 1025:1025 -p 1993:993 --env DOMAIN=sb.com.mail mail<br>
 
 Open port if behind a firewall.
 
