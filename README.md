@@ -16,8 +16,9 @@ Build variables
 
 Two mail recipients for testing are created: (U/P) test/secret and sb/secret
 
-> Change exposed port
-podman build –build-arg=SMTPPORT=2025 -t mail .
+> Change exposed port<br>
+
+podman build –build-arg=SMTPPORT=2025 -t mail .<br>
 
 # Create container
 
