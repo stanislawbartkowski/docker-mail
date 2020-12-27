@@ -7,7 +7,8 @@ Containerized mail server. Simple and basic mail server using Postfix and Doveco
 Build variables
 | Variable | Description | Default
 | ---- | ---- | ---- |
-| SMTPPORT | SMTP port (non secure). | 1025
+| SMTPPORT | SMTP port (non secure) | 1025
+| IMAPSPORT | IMAPS port (secure) | 1993
 
 
 > git clone https://github.com/stanislawbartkowski/docker-mail.git<br>
@@ -16,9 +17,9 @@ Build variables
 
 Two mail recipients for testing are created: (U/P) test/secret and sb/secret
 
-Change exposed port<br>
+Change ports<br>
 
-> podman build --build-arg=SMTPPORT=2025 -t mail .<br>
+> podman build --build-arg=SMTPPORT=2025 --build-arg=IMAPSPORT=2993 -t mail .<br>
 
 # Create container
 
@@ -29,7 +30,7 @@ Ports exposed
 | Port | Description |
 | ---  | ----- |
 | ${SMTPPORT}  | SMTP port, default 1025
-| 993 | Secure IMAP port
+| ${IMAPSPORT}  | IMAPS secure port, default 1993
 
 Domain name
 
@@ -41,9 +42,9 @@ Domain name
 
 Ports: for non-root container map ports to values greater than 1024.
 
-> podman run --name mail -d -p 1025:1025  -p 1993:993 mail<br>
+> podman run --name mail -d -p 1025:1025  -p 1993:1993 mail<br>
 
-> podman run --name mailsb -d -p 1025:1025 -p 1993:993 --env DOMAIN=sb.com.mail mail<br>
+> podman run --name mailsb -d -p 1025:1025 -p 1993:1993 --env DOMAIN=sb.com.mail mail<br>
 
 Open port if behind a firewall.
 
