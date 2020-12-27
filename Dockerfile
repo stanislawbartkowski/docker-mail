@@ -21,7 +21,7 @@ RUN useradd test && \
   echo "sb:secret" | chpasswd
 
 EXPOSE ${SMTPPORT}
-EXPOSE 993
+EXPOSE ${IMAPSPORT}
 USER root
 
 CMD ["sh","./start.sh"]
