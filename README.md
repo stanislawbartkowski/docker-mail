@@ -4,6 +4,12 @@ Containerized mail server. Simple and basic mail server using Postfix and Doveco
 
 # Create image
 
+Build variables
+| Variable | Description | Default
+| ---- | ---- | ---- |
+| SMTPPORT | SMTP port (non secure). | 1025
+
+
 > git clone https://github.com/stanislawbartkowski/docker-mail.git<br>
 > cd docker-mail<br>
 > podman build -t mail .<br>
@@ -18,7 +24,7 @@ Ports exposed
 
 | Port | Description |
 | ---  | ----- |
-| 25 | SMTP port
+| ${SMTPPORT}  | SMTP port, default 1025
 | 993 | Secure IMAP port
 
 Domain name
