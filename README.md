@@ -322,3 +322,23 @@ listen mailsmtp
         server server1 172.30.253.110:1025 check
 ```
 > systemctl restart haproxy<br>
+
+Test on client desktop.
+> echo "Welcome from my desktop" | mailx -v -S smtp=mailsmtp-sb.apps.bewigged.os.fyre.ibm.com:1025 -S ssl-verify=ignore -s "I'm your sendmail" -r "sb" test@test.mail.com
+```
+Resolving host mailsmtp-sb.apps.bewigged.os.fyre.ibm.com . . . done.
+Connecting to 9.30.43.192:1025 . . . connected.
+220 test.mail.com ESMTP Postfix
+>>> HELO li-5483f1cc-30f8-11b2-a85c-ead196af19ff
+250 test.mail.com
+>>> MAIL FROM:<sb>
+250 2.1.0 Ok
+>>> RCPT TO:<test@test.mail.com>
+250 2.1.5 Ok
+>>> DATA
+354 End data with <CR><LF>.<CR><LF>
+>>> .
+250 2.0.0 Ok: queued as EFFF8900387A
+>>> QUIT
+221 2.0.0 Bye
+```
