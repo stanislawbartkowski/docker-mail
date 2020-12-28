@@ -195,5 +195,38 @@ Dec 13 20:26:45 407bd6d0898c dovecot[196]: imap(sb): Connection closed (NOOP fin
 Dec 13 20:26:45 407bd6d0898c dovecot[196]: imap(test): Connection closed (UID FETCH finished 5.596 secs ago) in=375 out=1514
 
 ```
+# OpenShift/Kubernetes
 
+## Make image public
+
+Make docker image publicly available, for instance, in *quay.io*
+
+> podman tag mail quay.io/stanislawbartkowski/mail:latest<br>
+> podman push quay.io/stanislawbartkowski/mail:latest<br>
+
+## Prepare service account
+
+*Mail* container requires *root* authority to run. In OpenShift, the default is *restricted* service and the container will fail.<br>
+Create *rootuid* service account with *anyuid* privilege. You need OpenShift *admin* authority to do that.
+
+* oc create serviceaccount rootuid<br>
+* oc adm policy add-scc-to-user anyuid -z rootuid<br>
+
+## Deploy the application
+
+A sample *yaml* configuration file is available. https://github.com/stanislawbartkowski/docker-mail/blob/main/openshift/mail.yaml<br>
+It uses *rootuid* service account created in the previous step.
+
+> oc create -f mail.yaml<br>
+
+Together with the pod, two services are created
+* mailsmtp : SMTP service
+* mailimaps : IMAPS service
+
+> docker-mail$ oc get svc<br>
+```
+NAME        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+mailimaps   ClusterIP   172.30.183.212   <none>        1993/TCP   13h
+mailsmtp    ClusterIP   172.30.253.110   <none>        1025/TCP   13h
+```
 
