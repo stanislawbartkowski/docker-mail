@@ -233,13 +233,23 @@ mailsmtp    ClusterIP   172.30.253.110   <none>        1025/TCP   13h
 
 It depends on the method and environment.
 
-IMAPS, mark *passthrough*<br>
+### IMAPS 
+
+Mark *passthrough* keyword.<br>
 
 > oc create route passthrough --service mailimaps<br>
-<br>
+
 > oc get route<br>
 
 ```
 NAME        HOST/PORT                                    PATH   SERVICES    PORT    TERMINATION   WILDCARD
 mailimaps   mailimaps-sb.apps.bewigged.os.fyre.ibm.com          mailimaps   <all>   passthrough   None
 ```
+
+In the environment I'm using, the port *443* is used to pass through encrypted traffic. 
+
+> mutt -f imaps://mailimaps-sb.apps.bewigged.os.fyre.ibm.com:443<br>
+
+Use *test/secret* as user name and password
+
+
