@@ -260,5 +260,42 @@ Use *test/secret* as user name and password
 NAME        HOST/PORT                                    PATH   SERVICES    PORT    TERMINATION   WILDCARD
 mailsmtp    mailsmtp-sb.apps.bewigged.os.fyre.ibm.com           mailsmtp    <all>   passthrough   None
 ```
-Unfortunately, in the OpenShift environment I'm using there is no way to use non-encrypted, no http traffic. Also *edge* termination is not working here because it is applicable only to HTTP endpoints.<br>
-The solution at hand is to make IP bridge on *mailsmtp-sb.apps.bewigged.os.fyre.ibm.com* to *mailsmtp* service ignoring *mailsmpt* route. *mailsmtp-sb.apps.bewigged.os.fyre.ibm.com* is only hostnamer resolver.
+Unfortunately, in the OpenShift environment I'm using there is no way to use non-encrypted and non-http traffic. Also *edge* termination is not working here because it is applicable only to HTTP endpoints.<br>
+The solution at hand is to make IP bridge on *mailsmtp-sb.apps.bewigged.os.fyre.ibm.com* to *mailsmtp* service ignoring *mailsmpt* route. *mailsmtp-sb.apps.bewigged.os.fyre.ibm.com* is only hostname DNS resolver.<br>
+<br>
+Firstly test *smtp* endpoint.
+
+> oc get pods<br>
+```
+NAME                       READY   STATUS    RESTARTS   AGE
+mail-5dcb75dcbf-nlndx      1/1     Running   0          13h
+```
+Use port forwarding<br>
+
+> oc port-forward mail-5dcb75dcbf-nlndx  1025 
+```
+Forwarding from 127.0.0.1:1025 -> 1025
+Forwarding from [::1]:1025 -> 1025
+```
+On a separate terminal session, mind *localhost* and *1025* port<br>
+> echo "Welcome" | mailx -v -S smtp=localhost:1025 -S ssl-verify=ignore -s "I'm your sendmail" -r "sb" test@test.mail.com
+```
+Resolving host localhost . . . done.
+Connecting to ::1:1025 . . . connected.
+220 test.mail.com ESMTP Postfix
+>>> HELO li-5483f1cc-30f8-11b2-a85c-ead196af19ff
+250 test.mail.com
+>>> MAIL FROM:<sb>
+250 2.1.0 Ok
+>>> RCPT TO:<test@test.mail.com>
+250 2.1.5 Ok
+>>> DATA
+354 End data with <CR><LF>.<CR><LF>
+>>> .
+250 2.0.0 Ok: queued as 9296D900387A
+>>> QUIT
+221 2.0.0 Bye
+```
+
+
+Assuming service clusterIP *172.30.253.110* and port *1025*.
