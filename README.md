@@ -252,4 +252,13 @@ In the environment I'm using, the port *443* is used to pass through encrypted t
 
 Use *test/secret* as user name and password
 
+### SMPT
 
+> oc create route passthrough --service mailsmtp<br>
+> oc get route<br>
+```
+NAME        HOST/PORT                                    PATH   SERVICES    PORT    TERMINATION   WILDCARD
+mailsmtp    mailsmtp-sb.apps.bewigged.os.fyre.ibm.com           mailsmtp    <all>   passthrough   None
+```
+Unfortunately, in the OpenShift environment I'm using there is no way to use non-encrypted, no http traffic. Also *edge* termination is not working here because it is applicable only to HTTP endpoints.<br>
+The solution at hand is to make IP bridge on *mailsmtp-sb.apps.bewigged.os.fyre.ibm.com* to *mailsmtp* service ignoring *mailsmpt* route. *mailsmtp-sb.apps.bewigged.os.fyre.ibm.com* is only hostnamer resolver.
