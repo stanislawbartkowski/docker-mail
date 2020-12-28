@@ -223,7 +223,7 @@ Together with the pod, two services are created
 * mailsmtp : SMTP service
 * mailimaps : IMAPS service
 
-> docker-mail$ oc get svc<br>
+> oc get svc<br>
 ```
 NAME        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
 mailimaps   ClusterIP   172.30.183.212   <none>        1993/TCP   13h
