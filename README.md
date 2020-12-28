@@ -323,7 +323,7 @@ listen mailsmtp
 ```
 > systemctl restart haproxy<br>
 
-Test on client desktop.
+Test on client desktop. Important: altough hostname provided by router is used here, the OpenShift router is ignored and the container is reached by *service* component.<br>
 > echo "Welcome from my desktop" | mailx -v -S smtp=mailsmtp-sb.apps.bewigged.os.fyre.ibm.com:1025 -S ssl-verify=ignore -s "I'm your sendmail" -r "sb" test@test.mail.com
 ```
 Resolving host mailsmtp-sb.apps.bewigged.os.fyre.ibm.com . . . done.
@@ -342,3 +342,10 @@ Connecting to 9.30.43.192:1025 . . . connected.
 >>> QUIT
 221 2.0.0 Bye
 ```
+## Summary
+We can connect to our OpenShift mail service using the following data.<br>
+
+| Parameter | Value |
+| ---- | --- |
+| SMPT service | mailsmtp-sb.apps.bewigged.os.fyre.ibm.com:1025
+| IMAPS service | mailimaps-sb.apps.bewigged.os.fyre.ibm.com:443
