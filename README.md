@@ -348,4 +348,4 @@ We can connect to our OpenShift mail service using the following data.<br>
 | Parameter | Server | Port |
 | ---- | --- |
 | SMPT service | mailsmtp-sb.apps.bewigged.os.fyre.ibm.com | 1025
-| IMAPS service | mailimaps-sb.apps.bewigged.os.fyre.ibm.com | 443
+| IMAPS service (TLS) | mailimaps-sb.apps.bewigged.os.fyre.ibm.com | 443
