@@ -238,7 +238,8 @@ IMAPS, mark *passthrough*<br>
 > oc create route passthrough --service mailimaps<br>
 <br>
 > oc get route<br>
+
 ```
-AME        HOST/PORT                                    PATH   SERVICES    PORT    TERMINATION   WILDCARD
+NAME        HOST/PORT                                    PATH   SERVICES    PORT    TERMINATION   WILDCARD
 mailimaps   mailimaps-sb.apps.bewigged.os.fyre.ibm.com          mailimaps   <all>   passthrough   None
 ```
