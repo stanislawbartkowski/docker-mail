@@ -345,7 +345,7 @@ Connecting to 9.30.43.192:1025 . . . connected.
 ## Summary
 We can connect to our OpenShift mail service using the following data.<br>
 
-| Parameter | Value |
+| Parameter | Server | Port |
 | ---- | --- |
-| SMPT service | mailsmtp-sb.apps.bewigged.os.fyre.ibm.com:1025
-| IMAPS service | mailimaps-sb.apps.bewigged.os.fyre.ibm.com:443
+| SMPT service | mailsmtp-sb.apps.bewigged.os.fyre.ibm.com | 1025
+| IMAPS service | mailimaps-sb.apps.bewigged.os.fyre.ibm.com | 443
