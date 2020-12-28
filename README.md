@@ -229,4 +229,16 @@ NAME        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
 mailimaps   ClusterIP   172.30.183.212   <none>        1993/TCP   13h
 mailsmtp    ClusterIP   172.30.253.110   <none>        1025/TCP   13h
 ```
+## Expose services externally
 
+It depends on the method and environment.
+
+IMAPS, mark *passthrough*<br>
+
+> oc create route passthrough --service mailimaps<br>
+<br>
+> oc get route<br>
+```
+AME        HOST/PORT                                    PATH   SERVICES    PORT    TERMINATION   WILDCARD
+mailimaps   mailimaps-sb.apps.bewigged.os.fyre.ibm.com          mailimaps   <all>   passthrough   None
+```
