@@ -298,3 +298,27 @@ Connecting to ::1:1025 . . . connected.
 ```
 
 Assuming service clusterIP *172.30.253.110* and port *1025*.
+
+On gateway node *mailsmtp-sb.apps.bewigged.os.fyre.ibm.com* bridge *172.30.253.110* address to any of OpenShift nodes, here *10.16.71.16*
+
+Temporary brigde, will dissapear after network restart.<br>
+> ip route add 172.30.253.110 via 10.16.71.16 dev eth0<br>
+
+Pernament solution, will survive network restart.<br>
+> vi /etc/sysconfig/network-scripts/route-eth0<br>
+```
+ADDRESS0=172.30.253.0
+NETMASK0=255.255.255.0
+GATEWAY0=10.16.71.16
+```
+> systemctl restart network
+
+Reconfigure HAProxy to redirect traffic on *1025* node to *172.30.253.110* address.<br>
+> vi /etc/haproxy/haproxy.cfg<br>
+```
+listen mailsmtp
+        bind *:1025
+        mode tcp
+        server server1 172.30.253.110:1025 check
+```
+> systemctl restart haproxy<br>
