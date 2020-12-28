@@ -277,7 +277,7 @@ Use port forwarding<br>
 Forwarding from 127.0.0.1:1025 -> 1025
 Forwarding from [::1]:1025 -> 1025
 ```
-On a separate terminal session, mind *localhost* and *1025* port<br>
+On a separate terminal session (mind *localhost* and *1025* port)<br>
 > echo "Welcome" | mailx -v -S smtp=localhost:1025 -S ssl-verify=ignore -s "I'm your sendmail" -r "sb" test@test.mail.com
 ```
 Resolving host localhost . . . done.
@@ -296,6 +296,5 @@ Connecting to ::1:1025 . . . connected.
 >>> QUIT
 221 2.0.0 Bye
 ```
-
 
 Assuming service clusterIP *172.30.253.110* and port *1025*.
