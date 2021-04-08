@@ -197,12 +197,6 @@ Dec 13 20:26:45 407bd6d0898c dovecot[196]: imap(test): Connection closed (UID FE
 ```
 # OpenShift/Kubernetes
 
-## Build docker image
-
-Use *443* for secure IMAPS.<br>
-
-> podman build --build-arg=IMAPSPORT=443 -t mail .
-
 ## Make image public
 
 Make docker image publicly available, for instance, in *quay.io*. In *quay.io* if the image is deployed for the first time, make it public through *quay.io* web page.
