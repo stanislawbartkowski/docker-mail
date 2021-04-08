@@ -201,7 +201,7 @@ Dec 13 20:26:45 407bd6d0898c dovecot[196]: imap(test): Connection closed (UID FE
 
 Make docker image publicly available, for instance, in *quay.io*. In *quay.io* if the image is deployed for the first time, make it public through *quay.io* web page.
 
-> podman login quay.io<br<
+> podman login quay.io<br>
 > podman tag mail quay.io/stanislawbartkowski/mail:latest<br>
 > podman push quay.io/stanislawbartkowski/mail:latest<br>
 
@@ -226,7 +226,7 @@ It uses *mail-sa* service account created in the previous step.
 
 > oc get pod<br>
 ```
-AME                    READY   STATUS    RESTARTS   AGE
+NAME                    READY   STATUS    RESTARTS   AGE
 mail-7c9b768fdd-tv9hs   1/1     Running   0          51s
 
 ```
