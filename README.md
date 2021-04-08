@@ -216,7 +216,7 @@ Create *mail-sa* service account with *anyuid* privilege. You need OpenShift *ad
 ## Deploy the application
 
 A sample *yaml* configuration file is available. https://github.com/stanislawbartkowski/docker-mail/blob/main/openshift/mail.yaml<br>
-It uses *rootuid* service account created in the previous step.
+It uses *mail-sa* service account created in the previous step.
 
 > oc create -f mail.yaml<br>
 
