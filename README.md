@@ -201,16 +201,17 @@ Dec 13 20:26:45 407bd6d0898c dovecot[196]: imap(test): Connection closed (UID FE
 
 Make docker image publicly available, for instance, in *quay.io*
 
+> podman login quay.io<br<
 > podman tag mail quay.io/stanislawbartkowski/mail:latest<br>
 > podman push quay.io/stanislawbartkowski/mail:latest<br>
 
 ## Prepare service account
 
 *Mail* container requires *root* authority to run. In OpenShift, the default is *restricted* service and the container will fail.<br>
-Create *rootuid* service account with *anyuid* privilege. You need OpenShift *admin* authority to do that.
+Create *mail-sa* service account with *anyuid* privilege. You need OpenShift *admin* authority to do that.
 
-* oc create serviceaccount rootuid<br>
-* oc adm policy add-scc-to-user anyuid -z rootuid<br>
+* oc create serviceaccount mail-sa<br>
+* oc adm policy add-scc-to-user anyuid -z mail-sa<br>
 
 ## Deploy the application
 
