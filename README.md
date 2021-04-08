@@ -197,13 +197,23 @@ Dec 13 20:26:45 407bd6d0898c dovecot[196]: imap(test): Connection closed (UID FE
 ```
 # OpenShift/Kubernetes
 
+## Build docker image
+
+Use *443* for secure IMAPS.<br>
+
+> podman build --build-arg=IMAPSPORT=443 -t mail .
+
 ## Make image public
 
-Make docker image publicly available, for instance, in *quay.io*
+Make docker image publicly available, for instance, in *quay.io*. In *quay.io* if the image is deployed for the first time, make it public through *quay.io* web page.
 
 > podman login quay.io<br<
 > podman tag mail quay.io/stanislawbartkowski/mail:latest<br>
 > podman push quay.io/stanislawbartkowski/mail:latest<br>
+
+## Create a seperate project for mail service
+
+> oc new-project mail<br>
 
 ## Prepare service account
 
@@ -218,7 +228,14 @@ Create *mail-sa* service account with *anyuid* privilege. You need OpenShift *ad
 A sample *yaml* configuration file is available. https://github.com/stanislawbartkowski/docker-mail/blob/main/openshift/mail.yaml<br>
 It uses *mail-sa* service account created in the previous step.
 
-> oc create -f mail.yaml<br>
+> oc create -f https://raw.githubusercontent.com/stanislawbartkowski/docker-mail/main/openshift/mail.yaml<br>
+
+> oc get pod<br>
+```
+AME                    READY   STATUS    RESTARTS   AGE
+mail-7c9b768fdd-tv9hs   1/1     Running   0          51s
+
+```
 
 Together with the pod, two services are created
 * mailsmtp : SMTP service
@@ -227,29 +244,27 @@ Together with the pod, two services are created
 > oc get svc<br>
 ```
 NAME        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
-mailimaps   ClusterIP   172.30.183.212   <none>        1993/TCP   13h
-mailsmtp    ClusterIP   172.30.253.110   <none>        1025/TCP   13h
+mailimaps   ClusterIP   172.30.189.246   <none>        443/TCP    42s
+mailsmtp    ClusterIP   172.30.79.240    <none>        1025/TCP   42s
 ```
 ## Expose services externally
 
-It depends on the method and environment.
-
 ### IMAPS 
 
-Mark *passthrough* keyword.<br>
+IMAPS is a secure connection and expose it using OpenShift Route.<br>
 
-> oc create route passthrough --service mailimaps<br>
+> oc expose service mailimaps<br>
 
 > oc get route<br>
 
 ```
-NAME        HOST/PORT                                    PATH   SERVICES    PORT    TERMINATION   WILDCARD
-mailimaps   mailimaps-sb.apps.bewigged.os.fyre.ibm.com          mailimaps   <all>   passthrough   None
+NAME        HOST/PORT                                    PATH   SERVICES    PORT   TERMINATION   WILDCARD
+mailimaps   mailimaps-mail.apps.boreal.cp.fyre.ibm.com          mailimaps   443                  None
 ```
 
 In the environment I'm using, the port *443* is used to pass through encrypted traffic. 
 
-> mutt -f imaps://mailimaps-sb.apps.bewigged.os.fyre.ibm.com:443<br>
+> mutt -f imaps://mailimaps-mail.apps.boreal.cp.fyre.ibm.com:443<br>
 
 Use *test/secret* as user name and password
 
