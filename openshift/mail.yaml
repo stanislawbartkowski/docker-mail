@@ -18,7 +18,7 @@ spec:
         image: quay.io/stanislawbartkowski/mail:latest
         ports:
         - containerPort: 1025
-          containerPort: 443
+          containerPort: 1993
 ---
 apiVersion: v1
 kind: Service
@@ -44,8 +44,8 @@ metadata:
   name: mailimaps
 spec:
   ports:
-  - port: 443
+  - port: 1993
     protocol: TCP
-    targetPort: 443
+    targetPort: 1993
   selector:
     app: mail
