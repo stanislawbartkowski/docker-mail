@@ -12,7 +12,7 @@ spec:
       labels:
         app: mail
     spec:
-      serviceAccount: rootuid
+      serviceAccount: mail-sa
       containers:
       - name: mail
         image: quay.io/stanislawbartkowski/mail:latest
