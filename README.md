@@ -215,7 +215,7 @@ Make docker image publicly available, for instance, in *quay.io*. In *quay.io* i
 Create *mail-sa* service account with *anyuid* privilege. You need OpenShift *admin* authority to do that.
 *Important*: in OC version 4.6/4.7, the *mail* container requires *privileged* SCC because the command *chroot* is blocked.
 
-* oc create serviceaccount mail-sa<br>
+* oc create serviceaccount mail-sa -n mail<br>
 
 OC version 4.5<br>
 Remove from https://github.com/stanislawbartkowski/docker-mail/blob/main/openshift/mail.yaml
@@ -227,7 +227,7 @@ Remove from https://github.com/stanislawbartkowski/docker-mail/blob/main/openshi
 
 OC version 4.6/4.7
 
-* oc adm policy add-scc-to-user privileged -z mail-sa<br>
+* oc adm policy add-scc-to-user privileged -z mail-sa -n mail<br>
 
 ## Deploy the application
 
@@ -265,10 +265,33 @@ IMAPS is a secure connection and expose it using OpenShift Route.<br>
 
 ```
 NAME        HOST/PORT                                    PATH   SERVICES    PORT   TERMINATION   WILDCARD
-mailimaps   mailimaps-mail.apps.boreal.cp.fyre.ibm.com          mailimaps   443                  None
+mailimaps   mailimaps-mail.apps.boreal.cp.fyre.ibm.com          mailimaps   1993                  None
 ```
 
-In the environment I'm using, the port *443* is used to pass through encrypted traffic. 
+The port *443* is used to pass through encrypted traffic. 
+
+Verify that service is listening on secure port and is providing a certificate.
+
+> openssl s_client -connect mailimaps-mail.apps.boreal.cp.fyre.ibm.com:443
+```
+..............
+ 0090 - 5f 0f 6d f7 e9 24 e3 40-46 a9 54 d6 1d 3c 0d f6   _.m..$.@F.T..<..
+    00a0 - de a5 4f ea 1b 68 ea 87-6d 8b 9a 2f 26 84 67 8a   ..O..h..m../&.g.
+    00b0 - 28 5c 93 7e 86 46 ca ab-6c 00 6b 3f d4 4d 30 5d   (\.~.F..l.k?.M0]
+    00c0 - 01 79 5b d0 57 ce 96 37-81 c3 03 7b 34 a8 6d 74   .y[.W..7...{4.mt
+    00d0 - 5c d1 3c dc 42 14 62 aa-ec e3 6a 3c 2e f4 8f ec   \.<.B.b...j<....
+    00e0 - 6d a4 1f 03 49 de b9 ae-2d 1c 07 4e be 15 b5 d3   m...I...-..N....
+    00f0 - 2d bc d5 5a 9a ef 95 08-75 ed 0b 2a 1e 2c d9 8b   -..Z....u..*.,..
+
+    Start Time: 1618007642
+    Timeout   : 7200 (sec)
+    Verify return code: 19 (self signed certificate in certificate chain)
+    Extended master secret: no
+    Max Early Data: 0
+---
+read R BLOCK
+
+```
 
 > mutt -f imaps://mailimaps-mail.apps.boreal.cp.fyre.ibm.com:443<br>
 
