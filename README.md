@@ -213,9 +213,21 @@ Make docker image publicly available, for instance, in *quay.io*. In *quay.io* i
 
 *Mail* container requires *root* authority to run. In OpenShift, the default is *restricted* service and the container will fail.<br>
 Create *mail-sa* service account with *anyuid* privilege. You need OpenShift *admin* authority to do that.
+*Important*: in OC version 4.6/4.7, the *mail* container requires *privileged* SCC because the command *chroot* is blocked.
 
 * oc create serviceaccount mail-sa<br>
+
+OC version 4.5<br>
+Remove from https://github.com/stanislawbartkowski/docker-mail/blob/main/openshift/mail.yaml
+```
+     securityContext:
+          privileged: true
+```
 * oc adm policy add-scc-to-user anyuid -z mail-sa<br>
+
+OC version 4.6/4.7
+
+* oc adm policy add-scc-to-user privileged -z mail-sa<br>
 
 ## Deploy the application
 
