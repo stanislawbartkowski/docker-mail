@@ -45,9 +45,9 @@ metadata:
     name: mailimaps
   name: mailimaps
 spec:
+  type: NodePort
   ports:
   - port: 1993
     protocol: TCP
-    targetPort: 1993
   selector:
     app: mail
