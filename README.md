@@ -250,8 +250,8 @@ Together with the pod, two services are created
 > oc get svc<br>
 ```
 NAME        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
-mailimaps   ClusterIP   172.30.189.246   <none>        443/TCP    42s
-mailsmtp    ClusterIP   172.30.79.240    <none>        1025/TCP   42s
+mailimaps   ClusterIP   172.30.89.56   <none>        1993/TCP         27s
+mailsmtp    NodePort    172.30.29.70   <none>        1025:31399/TCP   12m
 ```
 ## Expose services externally
 
@@ -259,7 +259,7 @@ mailsmtp    ClusterIP   172.30.79.240    <none>        1025/TCP   42s
 
 IMAPS is a secure connection and expose it using OpenShift Route.<br>
 
-> oc expose service mailimaps<br>
+> oc create route passthrough --service=mailimaps<br>
 
 > oc get route<br>
 
@@ -299,16 +299,7 @@ Use *test/secret* as user name and password
 
 ### SMPT
 
-> oc create route passthrough --service mailsmtp<br>
-> oc get route<br>
-```
-NAME        HOST/PORT                                    PATH   SERVICES    PORT    TERMINATION   WILDCARD
-mailsmtp    mailsmtp-sb.apps.bewigged.os.fyre.ibm.com           mailsmtp    <all>   passthrough   None
-```
-Unfortunately, in the OpenShift environment I'm using there is no way to use non-encrypted and non-http traffic. Also *edge* termination is not working here because it is applicable only to HTTP endpoints.<br>
-The solution at hand is to make IP bridge on *mailsmtp-sb.apps.bewigged.os.fyre.ibm.com* to *mailsmtp* service ignoring *mailsmpt* route. *mailsmtp-sb.apps.bewigged.os.fyre.ibm.com* is only hostname DNS resolver.<br>
-<br>
-Firstly test *smtp* endpoint.
+Verify that *SMPT* connection is active.
 
 > oc get pods<br>
 ```
@@ -342,36 +333,35 @@ Connecting to ::1:1025 . . . connected.
 221 2.0.0 Bye
 ```
 
-Assuming service clusterIP *172.30.253.110* and port *1025*.
+Expose SMPT externally.
 
-On gateway node *mailsmtp-sb.apps.bewigged.os.fyre.ibm.com* bridge *172.30.253.110* address to any of OpenShift nodes, here *10.16.71.16*
+Assuming HAProxy node *boreal-inf* and *NodeIP* port 31399.
 
-Temporary brigde, will dissapear after network restart.<br>
-> ip route add 172.30.253.110 via 10.16.71.16 dev eth0<br>
+> vi /etc/haproxy/haproxy.cfg
 
-Pernament solution, will survive network restart.<br>
-> vi /etc/sysconfig/network-scripts/route-eth0<br>
 ```
-ADDRESS0=172.30.253.0
-NETMASK0=255.255.255.0
-GATEWAY0=10.16.71.16
-```
-> systemctl restart network
-
-Reconfigure HAProxy to redirect traffic on *1025* node to *172.30.253.110* address.<br>
-> vi /etc/haproxy/haproxy.cfg<br>
-```
-listen mailsmtp
+...................
+frontend smpt-tcp
         bind *:1025
+        default_backend smpt-tcp
         mode tcp
-        server server1 172.30.253.110:1025 check
-```
-> systemctl restart haproxy<br>
+        option tcplog
 
-Test on client desktop. Important: altough hostname provided by router is used here, the OpenShift router is ignored and the container is reached by *service* component.<br>
-> echo "Welcome from my desktop" | mailx -v -S smtp=mailsmtp-sb.apps.bewigged.os.fyre.ibm.com:1025 -S ssl-verify=ignore -s "I'm your sendmail" -r "sb" test@test.mail.com
+backend smpt-tcp
+        balance source
+        mode tcp
+        server worker0 10.17.50.214:31399 check
+        server worker1 10.17.61.140:31399 check
+        server worker2 10.17.62.176:31399 check
+
 ```
-Resolving host mailsmtp-sb.apps.bewigged.os.fyre.ibm.com . . . done.
+
+> systemctl reload haproxy<br>
+
+Test on client desktop.<br>
+> echo "Welcome from my desktop" | mailx -v -S smtp=boreal-inf:1025 -S ssl-verify=ignore -s "I'm your sendmail" -r "sb" test@test.mail.com
+```
+Resolving host boreal-inf . . . done.
 Connecting to 9.30.43.192:1025 . . . connected.
 220 test.mail.com ESMTP Postfix
 >>> HELO li-5483f1cc-30f8-11b2-a85c-ead196af19ff
@@ -392,5 +382,5 @@ We can connect to our OpenShift mail service using the following data.<br>
 
 | Parameter | Server | Port |
 | ---- | --- | -- | 
-| SMPT service | mailsmtp-sb.apps.bewigged.os.fyre.ibm.com | 1025
-| IMAPS service (TLS) | mailimaps-sb.apps.bewigged.os.fyre.ibm.com | 443
+| SMPT service | boreal-inf | 1025
+| IMAPS service (TLS) | mailimaps-mail.apps.boreal.cp.fyre.ibm.com | 443
