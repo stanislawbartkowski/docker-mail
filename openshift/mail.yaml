@@ -14,9 +14,9 @@ spec:
     spec:
       serviceAccount: mail-sa      
       containers:
-      - securityContext:
-          privileged: true
       - name: mail
+        securityContext:
+          privileged: true
         image: quay.io/stanislawbartkowski/mail:latest
         ports:
         - containerPort: 1025
