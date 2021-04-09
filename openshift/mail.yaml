@@ -30,10 +30,10 @@ metadata:
     name: mailsmtp
   name: mailsmtp
 spec:
+  type: NodePort
   ports:
   - port: 1025
     protocol: TCP
-    targetPort: 1025
   selector:
     app: mail
 ---
@@ -45,9 +45,8 @@ metadata:
     name: mailimaps
   name: mailimaps
 spec:
-  type: NodePort
-  ports:
-  - port: 1993
+- port: 1993
     protocol: TCP
+    targetPort: 1993
   selector:
     app: mail
