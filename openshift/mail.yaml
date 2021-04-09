@@ -51,3 +51,4 @@ spec:
     targetPort: 1993
   selector:
     app: mail
+
