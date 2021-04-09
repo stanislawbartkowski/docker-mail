@@ -12,8 +12,10 @@ spec:
       labels:
         app: mail
     spec:
-      serviceAccount: mail-sa
+      serviceAccount: mail-sa      
       containers:
+      - securityContext:
+          privileged: true
       - name: mail
         image: quay.io/stanislawbartkowski/mail:latest
         ports:
